@@ -5,7 +5,7 @@ Created on Jul 22, 2013
 '''
 from Player import BasePlayer
 from abstractions.Discretizer import Discretizer
-from ucb.policies import GreedyPolicy
+from policies import GreedyPolicy
 
 
 ACTIONS = ['s', 'h']
@@ -16,7 +16,7 @@ class HungerAgent(BasePlayer) :
         self.lastStates = None
         self.lastActions = None
         self.lastRewards = None
-        self.name = "Hunger Agent"
+        self.name = "HungerAgent(" + str(policy) + ")"
       
     def hunt_choices(
                     self,
@@ -31,7 +31,7 @@ class HungerAgent(BasePlayer) :
         self.lastRewards = None
         for their_rep in player_reputations :
             state = (self.discretizer.hashMBonus(m), self.discretizer.hashMyReputation(current_reputation), 
-                     self.discretizer.hashTheirReputation(their_rep))             
+                     self.discretizer.hashTheirReputation(their_rep))          
             self.lastStates.append(state)
             self.lastActions.append(self.policy.act(state, ACTIONS))
         return self.lastActions

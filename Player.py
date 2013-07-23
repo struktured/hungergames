@@ -20,13 +20,13 @@ class BasePlayer(object):
         except AttributeError:
             return super(BasePlayer, self).__repr__()
     
-    def hunt_choices(*args, **kwargs):
+    def hunt_choices(*args, **kwargs):  # @NoSelf
         raise NotImplementedError("You must define a strategy!")
         
-    def hunt_outcomes(*args, **kwargs):
+    def hunt_outcomes(*args, **kwargs):  # @NoSelf
         pass
         
-    def round_end(*args, **kwargs):
+    def round_end(*args, **kwargs):  # @NoSelf
         pass
 
 

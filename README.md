@@ -6,6 +6,14 @@ This is an OOP solution where player classes are expected to inherit from a base
 
 I included the three sample players from the sample code, under the names `Pushover`, `Freeloader`, and `Alternator`.
 
+There are a couple other sample players implemented in bots.py.  These are `Random`, `MaxRepHunter`, and `FairHunter`.  
+
+The Random player decides to hunt with some probability p and slack with probability 1-p.  You can decide this probability when the player is created.  For a Random player that hunts 50% of the time and slacks 50% of the time you would create the player with Random(0.5).
+
+The MaxRepHunter is a player who only hunts with players who have the current maximum reputation.  A common question in the discussion section was how to beat someone who only slacks (Freeloader).  A pair of MaxRephunter's will beat a group of any size of Freeloaders.  Give it a shot.
+
+The FairHunter is a player who tries to play fair by hunting with probability equal to opponents reputation.  This means he will hunt with hunters and slack with slackers.  He never tries to take advantage of hunters.
+
 ## Usage
 
 *    `python app.py` runs a sample game with exactly one of each test bot. It's 3 lines of code and pretty easy to generalize to whatever custom players you might make up.
@@ -39,6 +47,8 @@ Thanks to the many people who've submitted/suggested changes! I've already gotte
 *    Any instance of `Game.py` must conform to the official rules 100%. Any player-visible difference between `Game.py` and the official rules is a bug.
 
 *    Because `Game.py` is pretending to be the server, it will not "trust" player instances at all. It will store its own state information like reputations and food even if the players are also storing that information.
+
+*    `bots.py` must have no global variables other than class definitions (so that `from bots import *` is safe)
 
 *    Due to interest from people who don't know Python or even programming at all yet, I imagine there will be some people that just want to run simulations and some that want to patch the engine. To accomodate those people, my goal is that this engine be 100% usable by someone who only edits `Player.py`, `app.py`, and perhaps `bots.py`. The other files, particularly `Game.py` should be usable as "black boxes".
 

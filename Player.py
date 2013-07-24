@@ -8,16 +8,19 @@
 # file to the contest. If you see any reason this would not work, please submit
 # an Issue to https://github.com/ChadAMiller/hungergames/issues or email me.
 
+# You can see more sample player classes in bots.py
+
 class BasePlayer(object):
     '''
     Base class so I don't have to repeat bookkeeping stuff.
     Do not edit unless you're working on the simulation.
     '''
     
-    def __repr__(self):
+    def __str__(self):
         try:
             return self.name
         except AttributeError:
+            # Fall back on Python default
             return super(BasePlayer, self).__repr__()
     
     def hunt_choices(*args, **kwargs):  # @NoSelf
@@ -43,11 +46,17 @@ class Player(BasePlayer):
                     m,
                     player_reputations,
                     ):
+        '''Required function defined in the rules'''
+                    
         return ['s']*len(player_reputations)
         
+
     def hunt_outcomes(self, food_earnings):
+        '''Required function defined in the rules'''
         pass
         
+
     def round_end(self, award, m, number_hunters):
+        '''Required function defined in the rules'''
         pass
         

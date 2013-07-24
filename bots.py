@@ -1,5 +1,7 @@
 from Player import BasePlayer
 from util.math import weighted_choice
+import random
+
 
 class Pushover(BasePlayer):
     '''Player that always hunts.'''
@@ -18,7 +20,7 @@ class Pushover(BasePlayer):
 
         
 class Freeloader(BasePlayer):
-    '''Player that never hunts.'''
+    '''Player that always slacks.'''
     
     def __init__(self):
         self.name = "Freeloader"
@@ -35,13 +37,10 @@ class Freeloader(BasePlayer):
         
 
 class Alternator(BasePlayer):
-    '''Player that alternates between hunting and not.'''
+    '''Player that alternates between hunting and slacking.'''
     def __init__(self):
         self.name = "Alternator"
-        self.moves = ['s', 'h']
-        
-    def update_strat(self):
-        self.moves.reverse()
+        self.last_played = 's'
         
     def hunt_choices(
                     self,
@@ -54,13 +53,11 @@ class Alternator(BasePlayer):
         self.update_strat()
         return [self.moves[0]]*len(player_reputations)
 
-class RandomPlayer(BasePlayer): 
-    '''Player that alternates between hunting and not.'''    
-    def __init__(self, dist=[.5, .5]):        
-        self.name = "Random(" + str(dist) + ")" 
-        self.moves = ['s', 'h']
-        self.dist = dist
-        
+class MaxRepHunter(BasePlayer):
+    '''Player that hunts only with people with max reputation.'''
+    def __init__(self):
+        self.name = "MaxRepHunter"
+
     def hunt_choices(
                     self,
                     round_number,
@@ -69,4 +66,42 @@ class RandomPlayer(BasePlayer):
                     m,
                     player_reputations,
                     ):
-        return [self.moves[weighted_choice(self.dist)] for _ in range(len(player_reputations))]
+        threshold = max(player_reputations)
+        return ['h' if rep == threshold else 's' for rep in player_reputations]
+
+
+class Random(BasePlayer):
+    '''
+    Player that hunts with probability p_hunt and
+    slacks with probability 1-p_hunt
+    '''
+    
+    def __init__(self, p_hunt=.5):
+        self.name = "Random" + str(p_hunt)
+        self.p_hunt = p_hunt
+
+    def hunt_choices(
+                    self,
+                    round_number,
+                    current_food,
+                    current_reputation,
+                    m,
+                    player_reputations,
+                    ):
+        return ['h' if random.random() < self.p_hunt else 's' for p in player_reputations]
+
+class FairHunter(BasePlayer):
+    '''Player that tries to be fair by hunting with same probability as each opponent'''
+    def __init__(self):
+        self.name = "FairHunter"
+
+    def hunt_choices(
+                self,
+                round_number,
+                current_food,
+                current_reputation,
+                m,
+                player_reputations,
+                ):
+        return ['h' if random.random() < rep else 's' for rep in player_reputations]
+        

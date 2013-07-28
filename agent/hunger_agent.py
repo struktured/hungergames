@@ -30,7 +30,7 @@ class HungerAgent(BasePlayer) :
         self.lastStates = list()        
         self.lastRewards = None
         for their_rep in player_reputations :
-            state = (self.discretizer.hashMBonus(m), self.discretizer.hashMyReputation(current_reputation), 
+            state = (self.discretizer.hashMBonus(m, len(player_reputations)+1), self.discretizer.hashMyReputation(current_reputation), 
                      self.discretizer.hashTheirReputation(their_rep))          
             self.lastStates.append(state)
             self.lastActions.append(self.policy.act(state, ACTIONS))

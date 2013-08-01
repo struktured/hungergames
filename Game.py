@@ -79,11 +79,7 @@ class Game(object):
         return len(self.players)
         
     def calculate_m(self):
-        try:
             return random.randrange(1, self.P*(self.P-1))
-        except ValueError:
-            # m stops existing for 2 players
-            return 3
             
         
     def play_round(self):
@@ -95,7 +91,7 @@ class Game(object):
         
         # Beginning of round setup
         random.shuffle(self.players)
-        reputations = tuple(player.rep for player in self.players)
+        reputations = list(player.rep for player in self.players)
         
         # Get player strategies
         strategies = []
@@ -115,7 +111,7 @@ class Game(object):
                 if i!=j:
                     results[i].append(payout(strategies[i][j], strategies[j][i]))
                 
-        total_hunts = sum(s.count('h') for s in strategies)		
+        total_hunts = sum(s.count('h') for s in strategies)
         
         if (self.verbose):
             print ("There were {} hunts of {} needed for bonus".format(total_hunts, m))
@@ -137,9 +133,10 @@ class Game(object):
             player.player.hunt_outcomes(result)
             player.player.round_end(bonus, m, total_hunts)
             
-                    
+    
         if self.verbose:
-            for p in self.players:
+            newlist = sorted(self.players, key=lambda x: x.food, reverse=True)
+            for p in newlist:
                 print (p)
                    
         
@@ -151,7 +148,7 @@ class Game(object):
     def game_over(self):        
         starved = [p for p in self.players if p.food <= 0]
         for p in starved:
-            print ("{} has starved and been eliminated in round {}".format(p.player.name, self.round))
+            print ("{} has starved and been eliminated in round {}".format(p.player, self.round))
         
         self.players = [p for p in self.players if p.food > 0]
         
@@ -172,10 +169,10 @@ class Game(object):
                 if len(self.players) <= 0:
                     print ("Everyone starved")
                 elif (len(self.players) == 1):
-                    print ("The winner is: " + self.players[0].player.name)
+                    print ("The winner is: ", self.players[0].player)
                 else:
                     survivors = sorted(self.players, key=lambda player: player.food, reverse=True)
-                    print ("The winner is: " + survivors[0].player.name)
+                    print ("The winner is: ", survivors[0].player)
                     print ("Multiple survivors:")
                     print (survivors)
                 break

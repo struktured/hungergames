@@ -4,13 +4,13 @@ Created on Jul 22, 2013
 @author: carm
 '''
 from Player import BasePlayer
-from abstractions.Discretizer import Discretizer
+from abstractions.Discretizer import TileDiscretizer
 from policies import GreedyPolicy
 
 
 ACTIONS = ['s', 'h']
 class HungerAgent(BasePlayer) :
-    def __init__(self, policy = GreedyPolicy(), discretizer = Discretizer()) :
+    def __init__(self, policy = GreedyPolicy(), discretizer = TileDiscretizer()) :
         self.policy = policy
         self.discretizer = discretizer        
         self.lastStates = None

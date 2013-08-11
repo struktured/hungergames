@@ -2,11 +2,16 @@ from __future__ import division, print_function
 from Game import Game
 from Player import Player
 from abstractions.Discretizer import TileDiscretizer, IdentityDiscretizer
-from agent.hunger_agent import BanditHungerAgent
+from agent.hunger_agent import BanditHungerAgent, HungerAgent2
 from agent.policies import UCBPolicy, GreedyPolicy, DUCBPolicy, MetaPolicy, \
     RandomPolicy, NonParametricStateCache
 from bots import *
 from random import random
+
+
+# BEST PLAYER:
+
+best_player = BanditHungerAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))) 
 
 # Bare minimum test game. See README.md for details.
 
@@ -31,9 +36,9 @@ if __name__ == '__main__':
                
     #players=[BanditHungerAgent(policy=UCBPolicy(B=2, eps=.5)),  BanditHungerAgent(GreedyPolicy(.20)), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), Random(.1), BanditHungerAgent(GreedyPolicy(.70)), Pushover(), FairHunter(), Freeloader(), Freeloader(), Pushover(), Random(.9), MaxRepHunter(), FairHunter(), FairHunter(), Random(.6), Random(.3), FairHunter(), Pushover(), BanditHungerAgent(GreedyPolicy(.99))]
 
-    players=[BanditHungerAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))), 
-             FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), Freeloader(), Random(.4), FairHunter(), Random(.2), Random(.8), BanditHungerAgent(policy=GreedyPolicy(eps=.95)), 
-                                                                       BanditHungerAgent(policy=MetaPolicy()), Pushover(), Pushover(), Pushover(), BanditHungerAgent(policy=GreedyPolicy())]
+#    players=[BanditHungerAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))), 
+ #            FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), FairHunter(), Freeloader(), Random(.4), FairHunter(), Random(.2), Random(.8), BanditHungerAgent(policy=GreedyPolicy(eps=.95)), 
+  #                                                                     BanditHungerAgent(policy=MetaPolicy()), Pushover(), Pushover(), Pushover(), BanditHungerAgent(policy=GreedyPolicy())]
     #players=[BanditHungerAgent(discretizer=IdentityDiscretizer(), policy=GreedyPolicy(eps=.90, stateCache=NonParametricStateCache())), 
              
      #        FairHunter(), FairHunter(), FairHunter(), Pushover(), Pushover(), Pushover(), Pushover(), Pushover(),    Freeloader(), Freeloader(),Freeloader(),Freeloader(),Freeloader(),Freeloader(),Freeloader(),Freeloader(),]
@@ -49,6 +54,7 @@ if __name__ == '__main__':
     #for i in range(num_greedy):
      #   players.append(BanditHungerAgent(policy=GreedyPolicy(.80 + (float(i)/ num_greedy/5))))
 
+    players = [Freeloader(), BanditHungerAgent(), FairHunter(),  best_player, Pushover(), HungerAgent2(), FairHunter(), Random(.5), FairHunter(), Random(.8)]
     game = Game(players, average_rounds=20000)
     game.play_game()
     

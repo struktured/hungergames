@@ -15,13 +15,15 @@ from math import e
 
 class WeightedEuclideanDistanceMetric :
     
-    def __init__(self, weights=[1,1]):
+    def __init__(self, weights=[1,1,1]):
         self.weights = weights;    
     def distance(self, x, y):
-        (m, their_rep, my_rep) = x
-        (m2, their_rep2, my_rep2) = y
         
-        numerator = self.weights[0]*pow(their_rep - their_rep2, 2) + self.weights[1]*pow(m - m2, 2)
+        numerator = 0
+        for i in range(len(x)) :
+            v_x = x[i]
+            v_y = y[i]
+            numerator += self.weights[i]*pow(v_x-v_y, 2)
                        
         return pow(numerator, .5)
         

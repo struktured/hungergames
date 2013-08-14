@@ -1,4 +1,6 @@
 from __future__ import division, print_function
+
+import arguments
 from Game import Game
 from Player import Player
 from abstractions.Discretizer import TileDiscretizer, IdentityDiscretizer
@@ -13,6 +15,14 @@ from random import random
 # BEST PLAYER:
 
 best_player = BanditAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))) 
+
+
+# Change these to edit the default Game parameters
+DEFAULT_VERBOSITY = True
+DEFAULT_MIN_ROUNDS = 300
+DEFAULT_AVERAGE_ROUNDS = 1000
+DEFAULT_END_EARLY = False
+DEFAULT_PLAYERS = [Player(), Pushover(), Freeloader(), Alternator(), MaxRepHunter(), Random(.2), Random(.8)]
 
 # Bare minimum test game. See README.md for details.
 
@@ -56,12 +66,19 @@ if __name__ == '__main__':
      #   players.append(BanditAgent(policy=GreedyPolicy(.80 + (float(i)/ num_greedy/5))))
 
 
-    players = [best_player, Freeloader(), FairHunter(), Freeloader(), FairHunter(), MaxRepHunter(), Pushover(), Random(.2), FairHunter(), Random(.10), Random(.5), Pushover(), 
-               ManagerAgent(policy=MetaPolicy()), Freeloader(), BanditAgent(UCBPolicy()), ManagerAgent(policy=GreedyPolicy(.95, stateCache=NonParametricStateCache())), FairHunter(), FairHunter(), FairHunter(), FairHunter(), 
-               BanditAgent(UCBPolicy()), ManagerAgent(policy=DUCBPolicy(discount=.85), worker_policy=GreedyPolicy(eps=.95)), 
-               Random(.6), Random(.1), Random(.95), Random(.4), BanditAgent(GreedyPolicy()), Random(.3), Random(.95), Random(.5), BanditAgent(policy=MetaPolicy())]
+#    players = [best_player, Freeloader(), FairHunter(), Freeloader(), FairHunter(), MaxRepHunter(), Pushover(), Random(.2), FairHunter(), Random(.10), Random(.5), Pushover(), 
+ #              ManagerAgent(policy=MetaPolicy()), Freeloader(), BanditAgent(UCBPolicy()), ManagerAgent(policy=GreedyPolicy(.95, stateCache=NonParametricStateCache())), FairHunter(), FairHunter(), FairHunter(), FairHunter(), 
+  #             BanditAgent(UCBPolicy()), ManagerAgent(policy=DUCBPolicy(discount=.85), worker_policy=GreedyPolicy(eps=.95)), 
+   #            Random(.6), Random(.1), Random(.95), Random(.4), BanditAgent(GreedyPolicy()), Random(.3), Random(.95), Random(.5), BanditAgent(policy=MetaPolicy())]
                                   
     #players = [Freeloader(), BanditAgent(), FairHunter(),  best_player, Pushover(), HungerAgent2(), FairHunter(), Random(.5), FairHunter(), Random(.8)]
-    game = Game(players, average_rounds=20000)
+    (players, options) = arguments.get_arguments()
+    # The list of players for the game is made up of
+    #   'Player' (your strategy)
+    #   bots from get_arguments (the bots to use)
+    player_list = players
+    # **options -> interpret game options from get_arguments
+    #              as a dictionary to unpack into the Game parameters
+    game = Game(player_list, **options)
     game.play_game()
     

@@ -143,7 +143,14 @@ class UCBPolicy(Policy) :
                 return a
         total = sum([self.stateCache.count(state,a) for a in actions])
         biases = [self.bias(total, state, a) for a in actions]
-        return self.argmax(state, actions, biases)  
+        chosen_act = self.argmax(state, actions, biases)
+        best_act = self.argmax(state, actions)  
+       # if best_act != chosen_act :
+         #   print 'exploring action: ' + str(chosen_act) + ", best_act=" + str(best_act)
+       # else :
+        #    print 'chose best act' + str(best_act)
+        return chosen_act
+    
     def __str__(self):
         return "UCBPolicy(" + str(self.B) + "," + str(self.eps) + ", cache="  + str(self.stateCache) +  ")"           
     def reward(self, state, action, reward) :
@@ -166,7 +173,12 @@ class DUCBPolicy(Policy) :
                 return a
         total = sum([self.stateCache.count(state,a) for a in actions])
         biases = [self.bias(total, state, a) for a in actions]
-        return self.argmax(state, actions, biases)  
+        chosen_act = self.argmax(state, actions, biases)
+        best_act = self.argmax(state, actions)  
+        if best_act != chosen_act :
+            print 'exploring action: ' + str(chosen_act) + ", best_act=" + str(best_act)
+        return chosen_act
+        
     def __str__(self):
         return "DUCBPolicy(" + str(self.B) + "," + str(self.eps) + ")"           
     def reward(self, state, action, reward) :        
@@ -191,4 +203,4 @@ class MetaPolicy(Policy) :
             p.reward(state, action, reward)        
         # Reward only the strategy the meta policy chose
         # Alternative: reward all strategies that would have selected the right policy?
-        self.meta_policy.reward(state, self.last_p, reward)        
+        self.meta_policy.reward(state, self.last_p, reward)

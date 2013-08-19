@@ -50,7 +50,7 @@ class Alternator(BasePlayer):
                     m,
                     player_reputations,
                     ):
-        self.update_strat()
+       # self.update_strat()
         return [self.moves[0]]*len(player_reputations)
 
 class MaxRepHunter(BasePlayer):

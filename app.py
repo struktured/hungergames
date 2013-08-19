@@ -4,25 +4,30 @@ import arguments
 from Game import Game
 from Player import Player
 from abstractions.Discretizer import TileDiscretizer, IdentityDiscretizer
-from agent.hunger_agent import BanditAgent, HungerAgent2, \
+from agent.hunger_agent import BanditAgent, \
     ManagerAgent
 from agent.policies import UCBPolicy, GreedyPolicy, DUCBPolicy, MetaPolicy, \
     RandomPolicy, NonParametricStateCache, StateCache
 from bots import *
 from random import random
+from agent.reputation_agents import ReputationAgent
 
 
 # BEST PLAYER:
 
-best_player = BanditAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))) 
+best_player = BanditAgent()
+exp_player1 = BanditAgent(policy=UCBPolicy(B=1, eps=2, stateCache=NonParametricStateCache(max_size=100))) 
+exp_player2 = BanditAgent(policy=UCBPolicy(B=2, eps=.5))
 
 
 # Change these to edit the default Game parameters
 DEFAULT_VERBOSITY = True
 DEFAULT_MIN_ROUNDS = 300
-DEFAULT_AVERAGE_ROUNDS = 1000
+DEFAULT_AVERAGE_ROUNDS = 10000
 DEFAULT_END_EARLY = False
-DEFAULT_PLAYERS = [Player(), Pushover(), Freeloader(), Alternator(), MaxRepHunter(), Random(.2), Random(.8)]
+DEFAULT_PLAYERS = [FairHunter(), best_player, FairHunter(), AverageHunter(), exp_player1, exp_player2, 
+                   best_player, BoundedHunter(.2, 1), Random(.5), BoundedHunter(.2, .5), 
+                   AverageHunter(), Freeloader(), MaxRepHunter(), Random(.2), Random(.8)]
 
 # Bare minimum test game. See README.md for details.
 
